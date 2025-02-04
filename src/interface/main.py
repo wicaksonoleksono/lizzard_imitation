@@ -3,7 +3,7 @@ Interface: Entry point (CLI or script) that ties everything together.
 """
 
 import argparse
-from application.training import train_pose_model
+from application.training import train_pose_model,fine_tune_pose_model
 from application.inference import run_inference_and_convert_2d_to_3d
 
 def main():
@@ -13,6 +13,14 @@ def main():
     parser.add_argument('--config', type=str, help="Path to DLC config.yaml")
     parser.add_argument('--video', type=str, nargs='+', help="Path(s) to video(s)")
     args = parser.parse_args()
+    if args.mode == 'fine_tune':
+        fine_tune_pose_model(
+            config_path=args.config,
+            project_name="ExistingLizardProject",
+            experimenter="YourName",
+            videos=args.video,
+            working_directory="."
+        )
 
     if args.mode == 'train':
         if not args.config or not args.video:
